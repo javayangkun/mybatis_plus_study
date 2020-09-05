@@ -1,0 +1,24 @@
+
+1) ID_WORK
+一.mybatis_plus 的主键默认生成策略 ID_WORK 全局唯一ID
+
+2)主键自增策略
+二.想要主键自增需要配置如下主键策略
+
+ 1.需要在创建数据表的时候设置主键自增
+ 2.实体字段中配置@Tableid(type = Id.Type.AUTO)
+ 3.Id.Type.ID_WORK_STR  生成19位值 数字类型使用这种 比如String 类型id
+ 4.Id.Type.ID_WORK 生成19位值 数字类型使用这种 比如long 类型id
+ 5.Id.Type.UUID 生成UUid
+ 6.Id.Type.INPUT 可以输入id
+ 7.Id.Type.NONE 不生成id
+三.想要影响所有的实体配置，可以设置全局主键
+mybatis-plus.global-config.db-config.id-type=auto
+
+四.项目中经常会遇到一些数据，每次都使用相同的方式填充，例如记录的创建时间，更新时间等。
+  我们可以使用MyBatis Plus的自动填充功能，完成这些字段的赋值工作：
+
+      @TableField(fill = FieldFill.INSERT)
+      private Date createTime;
+      @TableField(fill = FieldFill.INSERT_UPDATE)
+      private Date updateTime;
