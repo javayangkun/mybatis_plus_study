@@ -168,15 +168,14 @@ public class MybatisPlusApplicationTests {
     public void testWrapper7(){
         //or and 这里使用的是 UpdateWrapper
         UpdateWrapper<User> wrapper = new UpdateWrapper<>();
+
     }
 
     @Test
     public void testWrapper8(){
         //orderBy、orderByDesc、orderByAsc
         QueryWrapper<User> wrapper = new QueryWrapper<>();
-        // wrapper.in("age",Arrays.asList(99,101,701)); 同sql中in
-        String sql = "select age from user where name like '%老%' ";
-        wrapper.inSql("age",sql); //in (子查询）
+        wrapper.orderByDesc("age");
         List<User> users = userMapper.selectList(wrapper);
         System.out.println("=======================================");
         System.out.println(users);
