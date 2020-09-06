@@ -1,0 +1,2 @@
+spring boot中可以自定义配置类
+只需要在类上添加Configuration

@@ -1,9 +1,6 @@
 package com.mp.study.domain;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.util.Date;
@@ -19,4 +16,12 @@ public class User {
     private Date createTime;
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
+    @Version
+    //这个不写可以，写是为了让人在数据库中看的更加直观，不然version字段为null,一改，没有对比看不出变化
+    @TableField(fill = FieldFill.INSERT)
+    private Integer version; //版本号
+
+    @TableLogic
+    @TableField(fill = FieldFill.INSERT)
+    private Integer deleted;
 }

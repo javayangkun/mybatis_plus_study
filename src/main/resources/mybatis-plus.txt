@@ -1,4 +1,14 @@
 
+mybatis_plus的主要功能
+    1)封装常用增删查改的功能
+    2)自带主键生成策略
+    3)自动填充常用字段
+    4)封装了乐观锁的解决方案
+    5)自带分页功能插件
+    6)封装了逻辑删除的功能
+    7)性能分析插件
+
+
 1) ID_WORK
 一.mybatis_plus 的主键默认生成策略 ID_WORK 全局唯一ID
 
@@ -22,3 +32,37 @@ mybatis-plus.global-config.db-config.id-type=auto
       private Date createTime;
       @TableField(fill = FieldFill.INSERT_UPDATE)
       private Date updateTime;
+五.乐观锁
+ 问题：写问题，丢失更新
+ 比如，前一个人修改工资，提交了事务，后一个人又修改了工资提交了事务，意思就是说，多个人同时修改了同一条记录
+ 最后提交的会把之前提交的数据覆盖。感觉好像没什么不对的？？但是，正确的做法是，前一个人拿到工资修改，然后后一个
+ 人再拿到修改过后的工资，再继续修改。两个人不能同时修改同一个数据，这样就产生了丢失更新的问题
+ 解决方案：
+  悲观锁：前一个人操作的时候其他人都不能操作，只有当前一个人操作完成的时候其他人才能够操作，是串行的状态，效率低
+  乐观锁：给原始数据加上版本号，前一个人修改原始数据的后版本更新，后一个人再修改原先版本数据的时候，自己的
+         版本和现有的版本对应不上，就不能提交修改。
+    1.mybatis_plus的乐观锁配置：
+        1）给实体类中和数据库中添加version 字段
+        2）给实体类中version字段添加@Version注解
+        3）配置mybatis_plus插件
+六.mybatis_plus分页（自带分页功能）
+    1)分页插件配置，
+    2)使用Page对象进行分页，和PageHelper用法差不多。
+七.逻辑删除和物理删除
+    1)逻辑删除：在表字段上增加delete字段值为0或1或者true or false 反正能表示未删除和删除的状态，数据还在数据库中，不做物理删除
+    2)物理删除：就直接在数据库中删除了，不做保留
+    注意：逻辑删除的插件配置后，查询的时候会自动带上逻辑删除标志，真他娘的贴心。如果想查询被删除的数据
+         可以使用最原始的方式，xml文件使用sql语句查询
+八.性能分析插件
+    性能分析拦截器，用于输出每条sql语句及其执行时间，sql性能执行分析，开发环境的使用，超过指定时间
+    停止运行。有助于发现问题
+九.wrapper条件构造（高级查询）
+    顶级父类wrapper 但是经常用的类有QueryWrapper. Wrapper 包装的意思。
+    QueryWrapper ： Entity 对象封装操作类，不是用lambda语法
+    UpdateWrapper ： Update 条件封装，用于Entity对象更新操作
+    gt >  ge >=  lt < le <=  isNull isNotNull
+    ne eq between notBetween allEq like notLike likeRight likeLeft
+    in notIn inSql notInSql exits notExits
+
+    or and (UpdateWrapper)  orderBy、orderByDesc、orderByAsc last
+    指定要查询的列 select("name"...) set、setSql 嵌套or、嵌套and
